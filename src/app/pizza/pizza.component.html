@@ -1,0 +1,6 @@
+<p>
+  {{pizza}} {{ ordered ? 'Ordered' : 'No'}}
+  <span [ngSpeechActionContext]="['pizza']"
+      [ngSpeechActionCommand]="pizza"
+      [ngSpeechAction]="order">(Say {{pizza}} to order)</span>
+</p>

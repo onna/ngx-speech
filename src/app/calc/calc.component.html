@@ -1,0 +1,22 @@
+<p>
+  I heard {{ msg }}
+</p>
+<p>
+  Context is {{ context }}
+</p>
+<div [ngSpeechContext]="['pizza']">
+  Say pizza
+  <div *ngFor="let pizza of pizzas">
+    <app-pizza [pizza]="pizza"></app-pizza>
+  </div>
+  <button (click)="morePizza()" [ngSpeechActionContext]="['pizza']"
+    ngSpeechActionCommand="plus"
+    [ngSpeechAction]="morePizza">Plus</button>
+  <button (click)="lessPizza()" [ngSpeechActionContext]="['pizza']"
+    ngSpeechActionCommand="Not good"
+    [ngSpeechAction]="lessPizza">Not good</button>
+  <span *ngIf="good">{{ good.message }}</span>
+</div>
+<div [ngSpeechContext]="['stop']">
+    Say stop
+</div>
