@@ -1,27 +1,45 @@
 # NgxSpeech
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.3.
+Voice recognition for Angular 5
 
-## Development server
+## Principle
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+NgxSpeech allows to trigger actions using voice commands.
 
-## Code scaffolding
+The `ngSpeechContext` directive allows to define context. For instance, "menu" could be a context that will allow to activate the menu commands, and "search" another context enabling search commands.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Example:
 
-## Build
+```html
+<div [ngSpeechContext]="['pizza']">
+  Say "pizza" and then choose your pizza
+</div>
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+The `ngSpeechAction` directive allow to register a command into a context and bind it to method.
 
-## Running unit tests
+Example:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```html
+<li [ngSpeechActionContext]="['pizza']"
+    [ngSpeechActionCommand]="'Napolitana'"
+    [ngSpeechAction]="order">Napolitana</li>
+```
 
-## Running end-to-end tests
+will trigger the `order()` method if we say "Napolitana" only if we are in the "pizza" context (i.e. we said "pizza" before saying "Napolitana").
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+All the words corresponding to a command or a context are compisong a **grammar**.
 
-## Further help
+A command or a sub-context can be activcayed only if we are in the parent context, but a first-level context can activatyed from anywhere.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+The `SpeechService` exposes useful observables:
+
+- `message`, the last recognized word(s), even if it is not part of the current grammar,
+- `context`, the current context as a path (like `"menu/account"`),
+- `command`, the last comnmand.
+
+## Installation
+
+```
+npm install ngx-speech
+```
