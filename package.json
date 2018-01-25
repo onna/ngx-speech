@@ -1,6 +1,7 @@
 {
   "name": "ngx-speech",
   "version": "0.0.0",
+  "author": "Eric BREHAULT",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
