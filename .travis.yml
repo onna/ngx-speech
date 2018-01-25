@@ -23,8 +23,6 @@ install:
 script:
   - yarn test
   - yarn build
-after_success:
-  - cd ./tests && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 notifications:
   email:
   - ebrehault@gmail.com
