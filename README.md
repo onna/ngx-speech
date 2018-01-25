@@ -2,7 +2,7 @@
 
 Voice recognition for Angular 5
 
-![Build Status](https://travis-ci.org/onna/ngx-speech.svg?branch=master)](https://travis-ci.org/onna/ngx-speech)
+[![Build Status](https://travis-ci.org/onna/ngx-speech.svg?branch=master)](https://travis-ci.org/onna/ngx-speech)
 
 ## Principle
 
