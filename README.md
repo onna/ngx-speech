@@ -30,7 +30,7 @@ Example:
 
 will trigger the `order()` method if we say "Napolitana" only if we are in the "pizza" context (i.e. we said "pizza" before saying "Napolitana").
 
-All the words corresponding to a command or a context are compisong a **grammar**.
+All the words corresponding to a command or a context are referenced in a **grammar**.
 
 A command or a sub-context can be activcayed only if we are in the parent context, but a first-level context can activatyed from anywhere.
 
@@ -44,4 +44,38 @@ The `SpeechService` exposes useful observables:
 
 ```
 npm install ngx-speech
+```
+
+## Usage
+
+In our app module, we need to import the `SpeechModule` and to provide the language to use:
+
+```typescript
+@NgModule({
+    ...
+    imports: [
+        ...
+        SpeechModule,
+    ],
+    providers: [
+        ...
+        { provide: 'SPEECH_LANG', useValue: 'en-US' },
+    ],
+    ...
+})
+export class AppModule { }
+```
+
+To start the speech recognition, we ned to call the `start()` method:
+
+```typescript
+import { SpeechService } from 'ngx-speech';
+
+...
+
+    constructor(public speech: SpeechService) { }
+
+    ngOnInit() {
+        this.speech.start();
+    }
 ```
