@@ -15,6 +15,7 @@ export class SpeechService {
     commands: {} = {};
     context: BehaviorSubject<string> = new BehaviorSubject('');
     refreshGrammar: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    started: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     constructor(
         private zone: NgZone,
@@ -65,9 +66,14 @@ export class SpeechService {
                 this.message.error(error);
             });
         };
+        this.recognition.onstart = () => {
+            this.zone.run(() => {
+                this.started.next(true);
+            });
+        };
         this.recognition.onend = () => {
             this.zone.run(() => {
-                this.message.error({error: true, message: 'Service stopped.'});
+                this.started.next(false);
             });
         };
 
