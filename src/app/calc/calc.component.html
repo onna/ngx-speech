@@ -1,3 +1,4 @@
+<button (click)="toggleVoiceRecognition()">{{ started ? 'Stop voice recognition' : 'Start voice recognition' }}</button>
 <p>
   I heard {{ msg }}
 </p>
@@ -20,3 +21,11 @@
 <div [ngSpeechContext]="['stop']">
     Say stop
 </div>
+<div [ngSpeechContext]="['comment']">
+  <span ngSpeechActionCommand="record" [ngSpeechActionContext]="['comment']"
+    [ngSpeechAction]="recordStart">Say "Comment", then "Record".</span>
+  <textarea>{{ comment }}</textarea>
+  <span ngSpeechActionCommand="over" [ngSpeechActionContext]="['comment']"
+    [ngSpeechAction]="recordStop">Say "Over" when your message is complete.</span>
+</div>
+

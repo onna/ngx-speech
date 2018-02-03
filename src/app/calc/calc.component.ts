@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SpeechService } from '../../lib';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'app-calc',
@@ -9,11 +10,14 @@ import { SpeechService } from '../../lib';
 export class CalcComponent implements OnInit {
 
     msg = 'nothing';
+    comment = '';
     context = '';
+    subscription: Subscription;
     good: any;
     pizzas: any[] = [
         'Sicilienne',
     ];
+    started = false;
 
     constructor(public speech: SpeechService) { }
 
@@ -26,6 +30,15 @@ export class CalcComponent implements OnInit {
             this.context = context;
         });
         this.good = {message: 'Try me!'};
+        this.speech.started.subscribe(started => this.started = started);
+    }
+
+    toggleVoiceRecognition() {
+        if (this.started) {
+            this.speech.stop();
+        } else {
+            this.speech.start();
+        }
     }
 
     morePizza() {
@@ -35,6 +48,16 @@ export class CalcComponent implements OnInit {
     lessPizza() {
         this.pizzas = ['Tomato'];
         console.log(this.speech.recognition);
+    }
+
+    recordStart() {
+        this.subscription = this.speech.message.subscribe(msg => {
+            this.comment += msg.message + '\n';
+        });
+    }
+
+    recordStop() {
+        this.subscription.unsubscribe();
     }
 
 }
