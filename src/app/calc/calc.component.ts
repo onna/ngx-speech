@@ -60,4 +60,8 @@ export class CalcComponent implements OnInit {
         this.subscription.unsubscribe();
     }
 
+    hello() {
+        console.log('hello');
+    }
+
 }

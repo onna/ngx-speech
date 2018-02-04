@@ -87,4 +87,20 @@ describe('SpeechService', () => {
             expect(context).toBe('ok');
         });
     }));
+    it('should recognize a global context command', inject([SpeechService], (service: SpeechService) => {
+        service.declareCommand('ok', []);
+        say(service, 'ok');
+        service.command.subscribe(context => {
+            expect(context).toBe('ok');
+        });
+    }));
+    it('should recognize a global context command when we are in a context', inject([SpeechService], (service: SpeechService) => {
+        service.declareContext(['hello']);
+        service.declareCommand('ok', []);
+        say(service, 'hello');
+        say(service, 'ok');
+        service.command.subscribe(context => {
+            expect(context).toBe('ok');
+        });
+    }));
 });

@@ -9,7 +9,7 @@ export class SpeechActionDirective implements OnInit, OnDestroy {
 
     @Input() ngSpeechAction: any;
     @Input() ngSpeechActionCommand: string;
-    @Input() ngSpeechActionContext: string[];
+    @Input() ngSpeechActionContext: string[] = [];
     subscription: Subscription;
 
     constructor(

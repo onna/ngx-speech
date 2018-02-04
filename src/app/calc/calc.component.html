@@ -21,6 +21,9 @@
 <div [ngSpeechContext]="['stop']">
     Say stop
 </div>
+<div ngSpeechActionCommand="hello" [ngSpeechAction]="hello">
+  Say hello
+</div>
 <div [ngSpeechContext]="['comment']">
   <span ngSpeechActionCommand="record" [ngSpeechActionContext]="['comment']"
     [ngSpeechAction]="recordStart">Say "Comment", then "Record".</span>

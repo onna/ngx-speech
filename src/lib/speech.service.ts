@@ -52,10 +52,14 @@ export class SpeechService {
                     if (context) {
                         this.context.next(context);
                     } else {
-                        if (this.context.value) {
-                            const isCommand = this.commands[this.context.value][word];
-                            if (isCommand) {
-                                this.command.next({context: this.context.value, command: word});
+                        const isCommand = this.commands[this.context.value] && this.commands[this.context.value][word];
+                        if (isCommand) {
+                            this.command.next({context: this.context.value, command: word});
+                        } else {
+                            // try to match a global context command
+                            const isGlobalCommand = this.commands[''] && this.commands[''][word];
+                            if (isGlobalCommand) {
+                                this.command.next({context: '', command: word});
                             }
                         }
                     }
