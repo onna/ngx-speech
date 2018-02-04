@@ -1,6 +1,7 @@
 import { Inject, Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { debounceTime } from 'rxjs/operators';
 
 const DEFAULT_GRAMMAR = `#JSGF V1.0; grammar Digits;
 public <Digits> = ( <digit> ) + ;
@@ -77,8 +78,9 @@ export class SpeechService {
             });
         };
 
-        // TODO: add a throttle
-        this.refreshGrammar.subscribe(() => {
+        this.refreshGrammar.pipe(
+            debounceTime(500)
+        ).subscribe(() => {
             this.setGrammar();
         });
     }
