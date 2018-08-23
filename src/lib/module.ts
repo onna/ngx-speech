@@ -1,23 +1,22 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { SpeechActionDirective } from './speech-action.directive';
 import { SpeechService } from './speech.service';
+import { SpeechActionDirective } from './speech-action.directive';
 import { SpeechContextDirective } from './speech-context.directive';
-
 
 @NgModule({
     declarations: [
         SpeechActionDirective,
-        SpeechContextDirective,
+        SpeechContextDirective
     ],
     imports: [
-        CommonModule,
+        CommonModule
     ],
     providers: [SpeechService],
     exports: [
         SpeechActionDirective,
-        SpeechContextDirective,
-    ],
+        SpeechContextDirective
+    ]
 })
 export class SpeechModule { }

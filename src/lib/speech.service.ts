@@ -1,22 +1,22 @@
-import { Inject, Injectable, NgZone } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { debounceTime } from 'rxjs/operators';
+import { Inject, Injectable, NgZone, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 const DEFAULT_GRAMMAR = `#JSGF V1.0; grammar Digits;
 public <Digits> = ( <digit> ) + ;
 <digit> = ( zero | one | two | three | four | five | six | seven | eight | nine );`;
 
 @Injectable()
-export class SpeechService {
-
+export class SpeechService implements OnDestroy {
     recognition: any;
     message: Subject<any> = new Subject();
     command: Subject<any> = new Subject();
     commands: {} = {};
     context: BehaviorSubject<string> = new BehaviorSubject('');
-    refreshGrammar: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    refreshGrammar: BehaviorSubject<boolean> = new BehaviorSubject(false);
     started: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+    private _destroyed = new Subject<void>();
 
     constructor(
         private zone: NgZone,
@@ -83,21 +83,27 @@ export class SpeechService {
         };
 
         this.refreshGrammar.pipe(
+            takeUntil(this._destroyed),
             debounceTime(500)
         ).subscribe(() => {
             this.setGrammar();
         });
     }
 
-    start() {
+    ngOnDestroy(): void {
+        this._destroyed.next();
+        this._destroyed.complete();
+    }
+
+    start(): void {
         this.recognition.start();
     }
 
-    stop() {
+    stop(): void {
         this.recognition.stop();
     }
 
-    declareContext(context: string[]) {
+    declareContext(context: string[]): void {
         const contextKey = context.map(w => w.toLowerCase()).join('/');
         if (!this.commands[contextKey]) {
             this.commands[contextKey] = {};
@@ -105,7 +111,7 @@ export class SpeechService {
         this.refreshGrammar.next(true);
     }
 
-    declareCommand(command, context) {
+    declareCommand(command, context): void {
         const contextKey = context.map(w => w.toLowerCase()).join('/');
         if (!this.commands[contextKey]) {
             this.commands[contextKey] = {};
@@ -114,7 +120,7 @@ export class SpeechService {
         this.refreshGrammar.next(true);
     }
 
-    setContext(context: string[]) {
+    setContext(context: string[]): void {
         const contextKey = context.map(w => w.toLowerCase()).join('/');
         this.context.next(contextKey);
     }
@@ -131,7 +137,7 @@ export class SpeechService {
         }
     }
 
-    private setGrammar() {
+    private setGrammar(): void {
         const SpeechGrammarList = window['SpeechGrammarList'] || window['webkitSpeechGrammarList'];
         const words = {};
         Object.keys(this.commands).forEach(context => {
@@ -145,5 +151,4 @@ export class SpeechService {
         speechRecognitionList.addFromString(grammar, 1);
         this.recognition.grammars = speechRecognitionList;
     }
-
 }
