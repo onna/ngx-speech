@@ -8,7 +8,7 @@
     "start": "ng serve",
     "build": "ng build --prod",
     "build:lib": "rimraf dist && ng-packagr -p src/lib/package.json && cp README.md ./dist/lib",
-    "test": "ng test --single-run",
+    "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
