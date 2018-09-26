@@ -1,19 +1,19 @@
 {
+  "$schema": "../../node_modules/ng-packagr/package.schema.json",
   "name": "ngx-speech",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Eric BREHAULT",
   "license": "MIT",
   "repository": "https://github.com/onna/ngx-speech",
   "peerDependencies": {
-    "@angular/core": "^5.0.0",
-    "@angular/common": "^5.0.0"
+    "@angular/common": ">=6.0.0",
+    "@angular/core": ">=6.0.0",
+    "rxjs": ">=6.0.0"
   },
   "ngPackage": {
-    "$schema": "./node_modules/ng-packagr/ng-package.schema.json",
-    "workingDirectory": "../../.ng_build",
     "lib": {
       "entryFile": "public_api.ts"
     },
-    "dest": "./dist/lib"
+    "dest": "../../dist/lib"
   }
 }

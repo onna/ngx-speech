@@ -1,10 +1,1 @@
 /* You can add global styles to this file, and also import other style files */
-.speech-active-context {
-    background-color: grey;
-}
-.speech-active-context-child {
-    background-color: yellow;
-}
-.speech-active-context-ancestor {
-    background-color: lightgrey;
-}
