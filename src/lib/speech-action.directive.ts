@@ -25,7 +25,7 @@ export class SpeechActionDirective implements OnDestroy, OnInit {
             takeUntil(this._destroyed),
             filter(command => this.match(command))
         ).subscribe(
-            command => {
+            _command => {
                 const component = (<any>this._view.injector).view.component;
                 this.ngSpeechAction.bind(component)();
             }

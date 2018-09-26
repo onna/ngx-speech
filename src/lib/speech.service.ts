@@ -125,7 +125,7 @@ export class SpeechService implements OnDestroy {
         this.context.next(contextKey);
     }
 
-    getContextForWord(word): string {
+    getContextForWord(word: string): string | null {
         // first try to match a subcontext of the current context
         const context = this.context.value ? this.context.value + '/' + word : word;
         if (this.commands[context]) {
@@ -135,6 +135,7 @@ export class SpeechService implements OnDestroy {
         if (this.commands[word]) {
             return word;
         }
+        return null;
     }
 
     private setGrammar(): void {
