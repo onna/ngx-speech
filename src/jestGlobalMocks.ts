@@ -1,4 +1,4 @@
-const mock = () => {
+const ngxSpeechStorageMock = () => {
     let storage = {};
     return {
         getItem: key => key in storage ? storage[key] : null,
@@ -8,11 +8,11 @@ const mock = () => {
     };
 };
 
-class MockSpeech {}
+class NgxSpeechRecognitionMock {}
 
-Object.defineProperty(window, 'SpeechRecognition', { value: MockSpeech });
-Object.defineProperty(window, 'localStorage', { value: mock() });
-Object.defineProperty(window, 'sessionStorage', { value: mock() });
+Object.defineProperty(window, 'SpeechRecognition', { value: NgxSpeechRecognitionMock });
+Object.defineProperty(window, 'localStorage', { value: ngxSpeechStorageMock() });
+Object.defineProperty(window, 'sessionStorage', { value: ngxSpeechStorageMock() });
 Object.defineProperty(window, 'getComputedStyle', {
     value: () => ['-webkit-appearance']
 });
