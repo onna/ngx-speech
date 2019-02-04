@@ -9,8 +9,8 @@ import { SpeechService } from './speech.service';
 })
 export class SpeechActionDirective implements OnDestroy, OnInit {
     @Input() ngSpeechAction: any;
-    @Input() ngSpeechActionCommand: string;
-    @Input() ngSpeechActionContext: string[] = [];
+    @Input() ngSpeechActionCommand?: string;
+    @Input() ngSpeechActionContext?: string[] = [];
 
     private _destroyed = new Subject<void>();
 
@@ -38,7 +38,7 @@ export class SpeechActionDirective implements OnDestroy, OnInit {
     }
 
     match(command): boolean {
-        const context = this.ngSpeechActionContext.map(w => w.toLowerCase()).join('/');
-        return command.context === context && command.command === this.ngSpeechActionCommand.toLowerCase();
+        const context = (this.ngSpeechActionContext || []).map(w => w.toLowerCase()).join('/');
+        return command.context === context && !!this.ngSpeechActionCommand && command.command === this.ngSpeechActionCommand.toLowerCase();
     }
 }

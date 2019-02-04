@@ -7,7 +7,7 @@ styleUrls: ['./pizza.component.css']
 })
 export class PizzaComponent {
 
-    @Input() pizza: string;
+    @Input() pizza?: string;
     ordered = false;
 
     order() {

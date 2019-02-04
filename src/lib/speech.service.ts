@@ -6,12 +6,18 @@ const DEFAULT_GRAMMAR = `#JSGF V1.0; grammar Digits;
 public <Digits> = ( <digit> ) + ;
 <digit> = ( zero | one | two | three | four | five | six | seven | eight | nine );`;
 
+class Message {
+    success?: boolean;
+    error?: boolean;
+    message = '';
+}
+
 @Injectable()
 export class SpeechService implements OnDestroy {
-    recognition: any;
-    message: Subject<any> = new Subject();
-    command: Subject<any> = new Subject();
-    commands: {} = {};
+    recognition: SpeechRecognition;
+    message: Subject<Message> = new Subject();
+    command: Subject<{context: string, command: string}> = new Subject();
+    commands: {[context: string]: any} = {};
     context: BehaviorSubject<string> = new BehaviorSubject('');
     refreshGrammar: BehaviorSubject<boolean> = new BehaviorSubject(false);
     started: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -30,7 +36,7 @@ export class SpeechService implements OnDestroy {
         this.recognition.continuous = true;
 
         this.recognition.onresult = event => {
-            let message = {};
+            let message: Message = {message: ''};
             let word = '';
             if (event.results) {
                 const result = event.results[event.resultIndex];
@@ -96,11 +102,15 @@ export class SpeechService implements OnDestroy {
     }
 
     start(): void {
-        this.recognition.start();
+        if (!this.started.getValue()) {
+            this.recognition.start();
+        }
     }
 
     stop(): void {
-        this.recognition.stop();
+        if (this.started.getValue()) {
+            this.recognition.stop();
+        }
     }
 
     declareContext(context: string[]): void {

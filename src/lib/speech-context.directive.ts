@@ -8,8 +8,8 @@ import { SpeechService } from './speech.service';
     selector: '[ngSpeechContext]'
 })
 export class SpeechContextDirective implements OnDestroy, OnInit {
-    @Input() ngSpeechContext: string[];
-    @HostBinding('class') speechClass: string;
+    @Input() ngSpeechContext?: string[];
+    @HostBinding('class') speechClass?: string;
 
     private _destroyed = new Subject<void>();
 
@@ -18,8 +18,9 @@ export class SpeechContextDirective implements OnDestroy, OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.speech.declareContext(this.ngSpeechContext);
-        const localContext = this.ngSpeechContext.map(w => w.toLowerCase());
+        const context = this.ngSpeechContext || [];
+        this.speech.declareContext(context);
+        const localContext = context.map(w => w.toLowerCase());
         this.speech.context.pipe(
             takeUntil(this._destroyed)
         ).subscribe(context => {
