@@ -14,7 +14,7 @@ class Message {
 
 @Injectable()
 export class SpeechService implements OnDestroy {
-    recognition: SpeechRecognition;
+    recognition?: SpeechRecognition;
     message: Subject<Message> = new Subject();
     command: Subject<{context: string, command: string}> = new Subject();
     commands: {[context: string]: any} = {};
@@ -28,9 +28,15 @@ export class SpeechService implements OnDestroy {
         private zone: NgZone,
         @Inject('SPEECH_LANG') public lang: string,
     ) {
+        if (window['SpeechRecognition'] || window['webkitSpeechRecognition']) {
+            this.init();
+        }
+    }
+
+    init() {
         const SpeechRecognition = window['SpeechRecognition'] || window['webkitSpeechRecognition'];
-        this.recognition = new SpeechRecognition();
-        this.recognition.lang = lang;
+        this.recognition = <SpeechRecognition>(new SpeechRecognition());
+        this.recognition.lang = this.lang;
         this.recognition.interimResults = false;
         this.recognition.maxAlternatives = 1;
         this.recognition.continuous = true;
@@ -102,13 +108,13 @@ export class SpeechService implements OnDestroy {
     }
 
     start(): void {
-        if (!this.started.getValue()) {
+        if (!this.started.getValue() && !!this.recognition) {
             this.recognition.start();
         }
     }
 
     stop(): void {
-        if (this.started.getValue()) {
+        if (this.started.getValue() && !!this.recognition) {
             this.recognition.stop();
         }
     }
@@ -150,16 +156,18 @@ export class SpeechService implements OnDestroy {
 
     private setGrammar(): void {
         const SpeechGrammarList = window['SpeechGrammarList'] || window['webkitSpeechGrammarList'];
-        const words = {};
-        Object.keys(this.commands).forEach(context => {
-            context.split('/').forEach(word => {
-                words[word] = true;
+        if (!!SpeechGrammarList && !!this.recognition) {
+            const words = {};
+            Object.keys(this.commands).forEach(context => {
+                context.split('/').forEach(word => {
+                    words[word] = true;
+                });
+                Object.keys(this.commands[context]).forEach(command => words[command] = true);
             });
-            Object.keys(this.commands[context]).forEach(command => words[command] = true);
-        });
-        const grammar = DEFAULT_GRAMMAR + ' public <command> = ' + Object.keys(words).join(' | ') + ' ;';
-        const speechRecognitionList = new SpeechGrammarList();
-        speechRecognitionList.addFromString(grammar, 1);
-        this.recognition.grammars = speechRecognitionList;
+            const grammar = DEFAULT_GRAMMAR + ' public <command> = ' + Object.keys(words).join(' | ') + ' ;';
+            const speechRecognitionList = new SpeechGrammarList();
+            speechRecognitionList.addFromString(grammar, 1);
+            this.recognition.grammars = speechRecognitionList;
+        }
     }
 }
