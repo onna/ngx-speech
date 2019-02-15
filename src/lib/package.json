@@ -1,7 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/package.schema.json",
   "name": "ngx-speech",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "author": "Eric BREHAULT",
   "license": "MIT",
   "repository": "https://github.com/onna/ngx-speech",
